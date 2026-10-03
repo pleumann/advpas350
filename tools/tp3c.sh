@@ -8,6 +8,9 @@
 # with CRLF line endings and a ^Z appended, which TP3 needs. The .COM file ends
 # up there, too. Prints the compiler summary or the error message with line
 # number and source line.
+#
+# TP3END sets the end address of the program (hex, e.g. E400). By default TP3
+# uses the one of the system it runs on, which under tnylpo is close to 64K.
 
 set -e
 TP3DIR=${TP3DIR:-$HOME/Retro/tp3cpm}
@@ -25,10 +28,13 @@ for f in "$SRC"/*.pas; do
 done
 
 cd "$BUILD"
-# Y = load error messages, O C Q = compile to .COM file, M = main file,
+# Y = load error messages, O C [E addr] Q = compile to .COM file (with end
+# address), M = main file,
 # C = compile; on error: ESC, ^K^D leaves the editor; Q = quit.
 ( printf 'Y'; sleep 1
-  printf 'O'; sleep 0.3; printf 'C'; sleep 0.3; printf 'Q'; sleep 0.3
+  printf 'O'; sleep 0.3; printf 'C'; sleep 0.3
+  [ -n "$TP3END" ] && { printf 'E%s\r' "$TP3END"; sleep 0.3; }
+  printf 'Q'; sleep 0.3
   printf 'M%s\r' "$MAIN"; sleep 0.5
   printf 'C'; sleep "${TP3WAIT:-20}"
   printf '\033'; sleep 0.5; printf '\013\004'; sleep 0.5

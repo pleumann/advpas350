@@ -10,6 +10,9 @@ The ports have been conducted with the help of Claude Code Opus 5.5.
 
 ## Status
 
+Ready-to-run versions for the Agon, CP/M and DOS (with data files) are
+available on the [releases page](https://github.com/pleumann/advpas350/releases).
+
 The following compilers are currently supported:
 
 - [Free Pascal](https://www.freepascal.org)
@@ -81,6 +84,7 @@ $ tools/build.sh           # Data files and all versions
 $ tools/build.sh --test    # Additionally plays the 350 point walkthrough on each
 $ src/tp3/build.sh         # Only the CP/M version
 $ src/tp3/run.sh 1234      # Play it under tnylpo, with random seed 1234
+$ tools/package.sh         # Zip files for Agon, CP/M and DOS in build/release
 ```
 
 The scripts share their settings via [tools/common.sh](tools/common.sh). They need [PASTA/80](https://github.com/pleumann/pasta80) (with
@@ -299,13 +303,15 @@ to be lost. The compiled VT-100 texts still exist in `ADVTXT.100`, though.
   suite covers it now (as of October 2026, not yet in a release). A forward declaration and its body must be in the same
   overlay, otherwise calls end up in the wrong code. All forward declarations
   in this port fulfill that.
-- **CP/M memory.** TP3 reports about 34.9K code (plus its 8K runtime), 6.4K
-  data and 14.8K free memory for heap and stack, compiled under tnylpo. TP3
-  places the data at the end address of the system it compiled on, so on a
-  CP/M machine with a smaller TPA the end address needs to be adjusted (TP3's
-  options menu). The game needs roughly 7.2K heap plus some stack, so the end
-  address can't go much below $E400 (calculated, not tested on real
-  hardware).
+- **CP/M memory.** TP3 places the data at the end address of the system it
+  compiles on, which under tnylpo is $FC31, almost 64K. That would crash on
+  most real CP/M machines, so the build sets the end address to $E800
+  (`TP3END` in [tools/tp3c.sh](tools/tp3c.sh), TP3's options menu). This
+  leaves 34.9K code (plus TP3's 8K runtime), 6.4K data and 9.7K free memory
+  for heap and stack, so the game needs a TPA up to at least $E800. The
+  walkthrough still works with $E500 but not with $E400 (run-time error FF,
+  heap and stack collide while loading), so the game needs about 8.7K heap
+  and stack under TP3. Not tested on real hardware.
 - **Original limitations stay.** The lamp lasts 330 turns (1000 if you ask
   for instructions, which costs 5 points). The 350 point walkthrough in
   `tests/walkthrough.txt` needs 424 turns. The lamp runs out of power just

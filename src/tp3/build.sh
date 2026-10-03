@@ -23,6 +23,9 @@ python3 "$ROOT/tools/verify-data.py" "$ROOT/original/files" "$TMP/fls"
 cp "$TMP"/fls/*.dta "$OUT/"
 
 echo "=== CP/M (Turbo Pascal 3): game"
-"$ROOT/tools/tp3c.sh" "$HERE" advent "$TMP/game" | grep -E 'Code|Free|Data'
+# End address $E800, so the game also runs on CP/M systems with a smaller TPA
+# (it only needs memory up to $E800). It needs about 8.7K for heap and
+# stack, which would allow $E500, so this leaves some reserve.
+TP3END=E800 "$ROOT/tools/tp3c.sh" "$HERE" advent "$TMP/game" | grep -E 'Code|Free|Data'
 mv "$TMP/game/advent.com" "$OUT/"
 rm -rf "$TMP"
