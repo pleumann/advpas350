@@ -26,7 +26,7 @@ The following table shows the status per compiler and target.
 | PASTA/80 | Spectrum Next | Compiles with overlays, but the resident part (22.7K) doesn't leave room for the heap, which needs about 7.5K. Needs more resident memory, e.g. a program start below $8000. |
 | PASTA/80 | CP/M          | Too large (about 63.8K without overlays, and PASTA/80 has no overlays on disk yet). |
 | PASTA/80 | Spectrum 128K | Not yet. Has overlays, but no file I/O and too little resident memory. Maybe with esxDOS. |
-| PASTA/80 | Spectrum 48K  | Not yet. Has no, no file I/O and too little resident memory. Maybe with esxDOS. |
+| PASTA/80 | Spectrum 48K  | Not yet. Has no overlays, no file I/O and too little resident memory. Maybe with esxDOS. |
 | Turbo Pascal 3 | CP/M | Works (`advent.com` 43,136 bytes, no overlays needed), completes the 350 point walkthrough. |
 | Turbo Pascal 5.5 | DOS           | Works (33K code), completes the 350 point walkthrough. |
 
