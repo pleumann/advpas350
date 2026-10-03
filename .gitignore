@@ -1,0 +1,6 @@
+# Build results (tools/build.sh, src/*/build.sh)
+/build/
+
+# macOS, Python
+.DS_Store
+__pycache__/

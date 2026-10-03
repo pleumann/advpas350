@@ -1,0 +1,427 @@
+no
+in
+get lamp
+get keys
+get food
+get bottle
+out
+s
+s
+s
+unlock grate
+d
+w
+get cage
+on
+w
+w
+w
+get bird
+w
+d
+s
+drop bird
+get bird
+n
+w
+drop keys
+drop food
+hall
+u
+debris
+get rod
+w
+w
+w
+d
+w
+wave rod
+w
+get diamonds
+get axe
+over
+hall
+stair
+throw axe
+get axe
+throw axe
+get axe
+throw axe
+get axe
+drop bird
+drop cage
+drop rod
+s
+throw axe
+get axe
+get jewelry
+n
+w
+get coins
+e
+n
+get silver
+n
+plugh
+drop diamonds
+drop jewelry
+drop coins
+drop silver
+plugh
+s
+s
+u
+s
+get nugget
+hall
+y2
+d
+plugh
+drop nugget
+plugh
+throw axe
+get axe
+plover
+throw axe
+get axe
+get emerald
+ne
+get pyramid
+plover
+plover
+plugh
+drop pyramid
+plugh
+s
+d
+bedquilt
+slab
+s
+d
+water plant
+u
+w
+n
+e
+u
+e
+e
+d
+fill bottle
+climb
+w
+bedquilt
+slab
+s
+d
+water plant
+u
+e
+d
+fill bottle
+u
+w
+d
+climb
+w
+get eggs
+n
+oil door
+n
+get trident
+drop bottle
+w
+d
+bedquilt
+w
+throw axe
+get axe
+e
+get pillow
+w
+oriental
+throw axe
+get axe
+get vase
+u
+w
+drop lamp
+drop axe
+drop eggs
+drop trident
+drop pillow
+drop vase
+e
+get emerald
+w
+get lamp
+get axe
+get eggs
+get trident
+get pillow
+get vase
+nw
+s
+se
+ne
+e
+u
+e
+u
+n
+plugh
+drop pillow
+drop vase
+drop emerald
+drop eggs
+drop trident
+get eggs
+plugh
+e
+u
+forward
+get keys
+get food
+hall
+stair
+secret
+d
+n
+n
+oriental
+w
+sw
+u
+throw eggs
+over
+barren
+e
+feed bear
+unlock chain
+get chain
+get bear
+fork
+ne
+e
+get spices
+fork
+w
+w
+over
+throw axe
+get axe
+drop bear
+over
+sw
+d
+bedquilt
+e
+u
+e
+u
+n
+plugh
+drop chain
+drop spices
+drop keys
+fee
+fie
+foe
+foo
+get trident
+plugh
+s
+d
+w
+d
+n
+open clam
+d
+d
+get pearl
+shell
+s
+e
+get magazine
+e
+drop magazine
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+no
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+e
+w
+slab
+u
+s
+kill dragon
+yes
+get rug
+n
+d
+s
+d
+climb
+w
+get eggs
+s
+d
+u
+w
+n
+e
+u
+e
+u
+n
+plugh
+drop eggs
+drop rug
+drop pearl
+drop trident
+plugh
+e
+u
+w
+over
+w
+throw axe
+get axe
+s
+e
+s
+s
+s
+n
+inventory
+e
+e
+nw
+throw axe
+get axe
+get chest
+get eggs
+get rug
+get pearl
+get trident
+se
+n
+d
+debris
+xyzzy
+drop chest
+drop eggs
+drop rug
+drop pearl
+drop trident
+plugh
+plover
+off
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+inventory
+sw
+get rod
+ne
+drop rod
+sw
+blast
