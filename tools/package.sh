@@ -5,9 +5,9 @@
 # usage: tools/package.sh [<target>...]   (after the builds, ideally tested)
 #
 # Targets are agon, cpm, dos and fpc; the default is all of them. The name of
-# the fpc zip depends on the system it was built on: advpas350-macos.zip,
-# advpas350-linux-x86_64.zip, advpas350-linux-arm64.zip or
-# advpas350-windows.zip.
+# the fpc zip depends on the system it was built on: advpas350-macos.zip
+# (universal binary) or advpas350-macos-arm64.zip, advpas350-linux-x86_64.zip,
+# advpas350-linux-arm64.zip or advpas350-windows.zip.
 
 set -e
 . "$(dirname "$0")/common.sh"
@@ -60,10 +60,11 @@ package_fpc() {
   [ "$arch" = aarch64 ] && arch=arm64
   case $(uname -s) in
     Darwin)
-      name=macos
       if [ "$(lipo -archs "$BUILD/fpc/advent" 2>/dev/null | wc -w)" -gt 1 ]; then
+        name=macos
         system="macOS (Apple Silicon and Intel)"
       else
+        name=macos-$arch
         system="macOS ($arch)"
       fi
       how="Unzip, open a terminal in the directory and type \"./advent\". The

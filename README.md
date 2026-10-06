@@ -128,8 +128,8 @@ combines them with `lipo`).
 
 **Other systems.** The GitHub Actions workflow
 [.github/workflows/build.yml](.github/workflows/build.yml) builds the Free
-Pascal version for Linux (x86_64 and ARM64), Windows and macOS (universal
-binary, using the official FPC package that contains both compilers), plays the
+Pascal version for Linux (x86_64 and ARM64), Windows and macOS (ARM64, with
+FPC from Homebrew; the universal binary needs a local build), plays the
 walkthrough on each and packs the zips. It only runs when started by hand, with "Run
 workflow" on the repository's Actions page or `gh workflow run build.yml`. The
 zips end up as artifacts of the run, and optionally (if a release tag is given

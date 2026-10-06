@@ -16,10 +16,14 @@ echo "=== Host (Free Pascal)"
 
 # fpc <output dir> <program> [<options>...]
 fpcc() {
-  local dir=$1 prog=$2
+  local dir=$1 prog=$2 native
   shift 2
   mkdir -p "$dir/units"
-  fpc "$@" -FE"$dir" -FU"$dir/units" "$HERE/$prog.pas" > "$dir/$prog.log" 2>&1 ||
+  # Git Bash on Windows converts plain path arguments for native programs,
+  # but not paths inside options like -FE, so these are converted here.
+  native=$dir
+  command -v cygpath > /dev/null && native=$(cygpath -w "$dir")
+  fpc "$@" -FE"$native" -FU"$native/units" "$HERE/$prog.pas" > "$dir/$prog.log" 2>&1 ||
     { cat "$dir/$prog.log"; exit 1; }
 }
 

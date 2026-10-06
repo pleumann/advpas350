@@ -1,6 +1,7 @@
 # Builds the Free Pascal version for Linux (x86_64, ARM64), Windows and macOS
-# (universal binary), plays the 350 point walkthrough on each and packs the
-# zips (as in tools/package.sh fpc). Only runs when started by hand ("Run
+# (ARM64; a universal binary can be built locally, see src/fpc/build.sh),
+# plays the 350 point walkthrough on each and packs the zips (as in
+# tools/package.sh fpc). Only runs when started by hand ("Run
 # workflow" on the Actions page, or "gh workflow run build.yml"). The zips are
 # kept as artifacts of the run and, if a release tag is given, attached to
 # that release.
@@ -56,14 +57,7 @@ jobs:
 
       - name: Install Free Pascal (macOS)
         if: runner.os == 'macOS'
-        run: |
-          # The official package contains the compilers for arm64 and x86_64,
-          # so src/fpc/build.sh can build a universal binary.
-          curl -sSfL -o fpc.dmg "https://downloads.sourceforge.net/project/freepascal/Mac%20OS%20X/3.2.2/fpc-3.2.2.intelarm64-macosx.dmg"
-          hdiutil attach -quiet -nobrowse -mountpoint /Volumes/fpc fpc.dmg
-          sudo installer -pkg "$(find /Volumes/fpc -maxdepth 1 -name '*.pkg' | head -1)" -target /
-          hdiutil detach -quiet /Volumes/fpc
-          rm fpc.dmg
+        run: brew install fpc
 
       - name: Build
         run: |
@@ -72,20 +66,6 @@ jobs:
 
       - name: Test
         run: src/fpc/test.sh
-
-      - name: Test x86_64 part under Rosetta (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          if ! arch -x86_64 /usr/bin/true 2> /dev/null; then
-            echo "Rosetta not available, skipped"
-            exit 0
-          fi
-          T=$(mktemp -d)
-          cp build/fpc/* "$T/"
-          (cd "$T" && arch -x86_64 ./advent 1234 < "$GITHUB_WORKSPACE/tests/walkthrough.txt" |
-             python3 "$GITHUB_WORKSPACE/tools/echo-input.py" "$GITHUB_WORKSPACE/tests/walkthrough.txt" > x86.txt)
-          tools/normalize.sh "$T/x86.txt" | diff -u tests/expected.txt -
-          echo "x86_64 transcript matches"
 
       - name: Package
         run: tools/package.sh fpc
