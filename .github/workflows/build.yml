@@ -1,0 +1,103 @@
+# Builds the Free Pascal version for Linux (x86_64, ARM64), Windows and macOS
+# (universal binary), plays the 350 point walkthrough on each and packs the
+# zips (as in tools/package.sh fpc). Only runs when started by hand ("Run
+# workflow" on the Actions page, or "gh workflow run build.yml"). The zips are
+# kept as artifacts of the run and, if a release tag is given, attached to
+# that release.
+
+name: Build host versions
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Release tag to attach the zips to (e.g. v0.5), empty for artifacts only
+        required: false
+        default: ''
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x86_64
+            os: ubuntu-latest
+          - name: linux-arm64
+            os: ubuntu-24.04-arm
+          - name: windows
+            os: windows-latest
+          - name: macos
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Free Pascal (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fp-compiler
+
+      - name: Install Free Pascal (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          choco install freepascal -y --no-progress
+          $fpc = Get-ChildItem -Path C:\tools, C:\FPC -Recurse -Filter fpc.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $fpc) { throw "fpc.exe not found after installation" }
+          Add-Content $env:GITHUB_PATH $fpc.DirectoryName
+
+      - name: Install Free Pascal (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          # The official package contains the compilers for arm64 and x86_64,
+          # so src/fpc/build.sh can build a universal binary.
+          curl -sSfL -o fpc.dmg "https://downloads.sourceforge.net/project/freepascal/Mac%20OS%20X/3.2.2/fpc-3.2.2.intelarm64-macosx.dmg"
+          hdiutil attach -quiet -nobrowse -mountpoint /Volumes/fpc fpc.dmg
+          sudo installer -pkg "$(find /Volumes/fpc -maxdepth 1 -name '*.pkg' | head -1)" -target /
+          hdiutil detach -quiet /Volumes/fpc
+          rm fpc.dmg
+
+      - name: Build
+        run: |
+          fpc -iV
+          src/fpc/build.sh
+
+      - name: Test
+        run: src/fpc/test.sh
+
+      - name: Test x86_64 part under Rosetta (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          if ! arch -x86_64 /usr/bin/true 2> /dev/null; then
+            echo "Rosetta not available, skipped"
+            exit 0
+          fi
+          T=$(mktemp -d)
+          cp build/fpc/* "$T/"
+          (cd "$T" && arch -x86_64 ./advent 1234 < "$GITHUB_WORKSPACE/tests/walkthrough.txt" |
+             python3 "$GITHUB_WORKSPACE/tools/echo-input.py" "$GITHUB_WORKSPACE/tests/walkthrough.txt" > x86.txt)
+          tools/normalize.sh "$T/x86.txt" | diff -u tests/expected.txt -
+          echo "x86_64 transcript matches"
+
+      - name: Package
+        run: tools/package.sh fpc
+
+      - name: Keep zip as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: advpas350-${{ matrix.name }}
+          path: build/release/*.zip
+
+      - name: Attach zip to release
+        if: inputs.release != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ inputs.release }}" build/release/*.zip --clobber
