@@ -12,8 +12,6 @@
 
 {	Data base limits, should be changed if text files are changed     }
 CONST	LOCSIZ=140;	{Maximum location number}
-	CARRIED=-1;	{ CHANGED: Location of carried objects, needed because
-			  ARRAY[-1..LOCSIZ] doesn't compile. }
 	MAXTRS=64;	{Maximum object number}
 {	Object number mnemonics	}
 	LAMP=2;
@@ -153,7 +151,7 @@ VAR	LOCATION,
 	letter in a word,  }
 	KTAB:ARRAY[65..90] OF INTEGER;
 {	Array of lists of objects at locations,   }
-	ATLOC:ARRAY[CARRIED..LOCSIZ] OF OBJLINK;
+	ATLOC:ARRAY[-1..LOCSIZ] OF OBJLINK;
 {	Properties of objects, their immovability info, and the current
 	location of each object,   }
 	PROP,FIXED,PLACE:OBJARRAY;

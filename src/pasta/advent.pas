@@ -135,12 +135,6 @@ order of things so that it will run even smaller.  The  time  required  to  swap
 out overlays is presently only slightly noticable by the player.  }
 
 BEGIN {MAIN PROGRAM}
-    { CHANGED: Work around a dependency analysis bug in the compiler (calls
-    from nested procedures to a FORWARD procedure without a body yet make the
-    compiler drop everything only called from that body).  Never executed.
-    Remove once the compiler is fixed.  }
-    IF MOVED AND NOT MOVED THEN BEGIN DOOBJ; DOVERB END;
-
     {  Initialize everything.  }
 {$IFDEF HEAPINFO}
     WRITELN('PASTA: Heap before INITIALIZE: ',MEMAVAIL);
