@@ -1,4 +1,4 @@
-# Colossal Cave Adventure in Pascal
+# Adventure(s) in Pascal (aka "Colossal Cave Adventure")
 
 This repository contains ports of [Barry C. Breen's "Adventures in Pascal"](https://www.ibiblio.org/pub/academic/computer-science/history/pdp-11/rsx/decus/rsx82b/351130/) (1980-1983) to various old and modern Pascal compilers. The original is known as BREE0350 in [Arthur O'Dwyer's collection of Adventure versions](https://github.com/Quuxplusone/Advent). It is a translation of Kent Blackett's FORTRAN-IV-PLUS version of Crowther and Woods' Colossal Cave Adventure (350 points), written in OMSI Pascal V1.2 for RSX-11M on a PDP-11/23 and distributed via DECUS. The original distribution is in [original](original) (see [README.md](original/README.md) there), the sources extracted from it in [src/omsi](src/omsi). The ported sources are in the other subfolders of [src](src).
 
@@ -10,8 +10,8 @@ The ports have been conducted with the help of Claude Code Opus 5.5.
 
 ## Status
 
-Ready-to-run versions for the Agon, CP/M and DOS (with data files) are
-available on the [releases page](https://github.com/pleumann/advpas350/releases).
+Ready-to-run versions for the Agon, Spectrum Next, CP/M, DOS, Linux, Windows
+and macOS (with data files) are available on the [releases page](https://github.com/pleumann/advpas350/releases).
 
 The following compilers are currently supported:
 
@@ -28,10 +28,10 @@ The following table shows the status per compiler and target.
 | Turbo Pascal 3 | CP/M | Works (`advent.com` 43,136 bytes plus 6.4K data at run time, no overlays needed), completes the 350 point walkthrough. |
 | Turbo Pascal 5.5 | DOS           | Works (33K code), completes the 350 point walkthrough. |
 | PASTA/80 | Agon          | Works, with overlays (`advent.bin` 24,223 bytes, `advent.ovr` 65,536 bytes for eight 8K slots). Completes the 350 point walkthrough. Also played on a real Agon, including saving and restoring a game. |
-| PASTA/80 | Spectrum Next | Works with overlays, at 28 MHz. Needs a PASTA/80 version with program start $6000 (resident part 22.8K, leaving 7.9K heap) and the esxDOS fix for files over 64K (both not yet released). Played manually in CSpect and on a real Next (up to the bird and the rod, including saving and restoring a game), walkthrough not yet run due to lack of automation. |
+| PASTA/80 | Spectrum Next | Works with overlays, at 28 MHz. Needs to be compiled to start address $6000 (resident part 22.8K, leaving 7.9K heap). Played manually in CSpect and on a real Next (up to the bird and the rod, including saving and restoring a game), walkthrough not yet run due to lack of automation. |
 | PASTA/80 | CP/M          | Too large (about 63.8K without overlays, including 4.5K static data, and PASTA/80 has no overlays on disk yet). |
-| PASTA/80 | Spectrum 128K | Not yet. Has overlays, but no file I/O and too little resident memory. Maybe with esxDOS. |
-| PASTA/80 | Spectrum 48K  | Not yet. Has no overlays, no file I/O and too little resident memory. Maybe with esxDOS. |
+| PASTA/80 | Spectrum 128K | Not yet. Has overlays, but no file I/O and too little resident memory. Maybe later with esxDOS. |
+| PASTA/80 | Spectrum 48K  | Not yet. Has no overlays, no file I/O and too little resident memory. Maybe later with esxDOS. |
 
 ## Source trees
 
@@ -72,7 +72,7 @@ anywhere:
 
 | Script | Does |
 |--------|------|
-| `build.sh` | Builds the data files and the game from scratch into `build/fpc`, `build/cpm`, `build/tp55` or `build/agon`. |
+| `build.sh` | Builds the data files and the game from scratch into `build/fpc`, `build/cpm`, `build/tp55` or `build/agon` and `build/next`. |
 | `run.sh [seed]` | Starts the game from there, in the emulator if needed. Saved games are kept in that directory. |
 | `test.sh` | Plays the 350 point walkthrough and compares the transcript with the expected one (see [Testing](#testing)). |
 
@@ -144,10 +144,7 @@ the five `.DTA` files to a CP/M disk and run
 **DOS.** `tpc advent.pas` in `src/tp55`.
 
 **Agon.** `pasta80 --agon --ovr --release advent.pas` in `src/pasta` gives
-`advent.bin` and `advent.ovr`. This needs a PASTA/80 version from October
-2026 or later, which includes the fixes for the bugs the port revealed (see
-below). With older versions the game doesn't compile or hangs after the first
-command. Copy `advent.bin`,
+`advent.bin` and `advent.ovr`. Copy `advent.bin`,
 `advent.ovr` and the five `.DTA` files into the same directory on the SD card,
 change into it and type `advent`. The game opens its files without a path, so
 it must be started from that directory. MOS 3 is required; MOS 2.x reports
@@ -249,14 +246,15 @@ Some notes on these:
   TPA without overlays.
 - **Heap.** Compiled with `HEAPINFO` defined, the PASTA/80 version shows how
   much heap `INITIALIZE` uses (about 7.2K for the travel table).
-- **Spectrum Next.** `pasta80 --zxnext --ovr --release advent.pas` in
-  `src/pasta`. The main program switches the Next to 28 MHz
+- **Spectrum Next.** `src/pasta/build.sh` also builds the Next version, with
+  `pasta80 --zxnext --ovr --run --start '$6000' --release advent.pas`, into
+  `build/next/advent.run` (a directory the Next starts directly, including the
+  data files). The resident part only fits if it starts at `$6000`. The main program switches the Next to 28 MHz
   (`SETCPUSPEED(3)`, only compiled for `SYS_ZXNEXT`). On all Spectrum
   targets, `SAYLINE` sets the ROM's scroll counter (`SCR_CT`, address 23692)
-  to 255 before each line, so long messages never stop with "Scroll?". Since the overlays are
-  separate files, the easiest way to try it is the IDE with
-  `pasta80 --ide --zxnext --run advent.pas` (C, then R) in a directory that
-  also contains the five `.DTA` files.
+  to 255 before each line, so long messages never stop with "Scroll?". To
+  try it in an emulator, start `build/next/advent.run` there (e.g. CSpect
+  with an SD card image containing it).
 
 ### Removed: wizardry
 
@@ -312,21 +310,6 @@ to be lost. The compiled VT-100 texts still exist in `ADVTXT.100`, though.
 - **Loading messages.** "Be patient...", "Now loading sections 1-7" and
   "Now loading section 8" to "12" are original. The latter are magic messages
   32 to 36 from `ADVENTURE.DAT`.
-- **Bugs found in PASTA/80.** Porting the game revealed a few bugs in
-  PASTA/80, all fixed in October 2026:
-  - The far call trampoline (`rtl/overlays.asm`) left the wrong overlay banked
-    in when the same overlay was called twice from root code and called
-    another overlay itself. `tests/overlays.pas` in the PASTA/80 test suite
-    covers this now.
-  - The dependency analysis dropped code that was only called from the body of
-    a `FORWARD` declared routine, if a nested procedure had called that routine
-    before its body was compiled.
-  - Negative lower bounds like `ARRAY[-1..LOCSIZ]` didn't compile.
-  - A forward declaration and its body in different overlays compiled without
-    a message, but calls ended up in the wrong code. This is an error now.
-
-  Earlier versions of the port contained workarounds for the second and third
-  bug, which are gone now.
 - **CP/M memory.** TP3 places the data at the end address of the system it
   compiles on, which under tnylpo is $FC31, almost 64K. That would crash on
   most real CP/M machines, so the build sets the end address to $E800

@@ -4,7 +4,7 @@
 #
 # usage: tools/package.sh [<target>...]   (after the builds, ideally tested)
 #
-# Targets are agon, cpm, dos and fpc; the default is all of them. The name of
+# Targets are agon, next, cpm, dos and fpc; the default is all of them. The name of
 # the fpc zip depends on the system it was built on: advpas350-macos.zip
 # (universal binary) or advpas350-macos-arm64.zip, advpas350-linux-x86_64.zip,
 # advpas350-linux-arm64.zip or advpas350-windows.zip.
@@ -33,7 +33,7 @@ package() {
   [ -d "$BUILD/$1" ] || { echo "build/$1 not found, run its build.sh first"; exit 1; }
   rm -rf "$dir"
   mkdir -p "$dir"
-  cp $4 "$dir/"
+  cp -R $4 "$dir/"
   cat > "$dir/README.txt" <<EOF
 Colossal Cave Adventure (350 points) for $3
 
@@ -92,7 +92,7 @@ The game opens its data files without a path, so it must be started from
 that directory."
 }
 
-for t in ${*:-agon cpm dos fpc}; do
+for t in ${*:-agon next cpm dos fpc}; do
   case $t in
     agon)
       package agon agon "the Agon Light" \
@@ -100,6 +100,16 @@ for t in ${*:-agon cpm dos fpc}; do
 "Copy all files into one directory on the SD card, change into it and type
 \"advent\". The game opens its data files without a path, so it must be
 started from that directory. Needs MOS 3."
+      ;;
+    next)
+      package next next "the ZX Spectrum Next" "$BUILD/next/advent.run" \
+"Copy the directory advent.run (including all files in it) to the SD card and
+select it in the Next's file browser. A directory ending in .run starts its
+BASIC loader automatically (press Symbol Shift + Enter to see its contents
+instead). The data files (*.DTA) must stay in advent.run, since the game
+opens them without a path. The game runs at 28 MHz and uses the Next's extra
+RAM for overlays. There is no command line on the Next, so the random seed
+below doesn't apply there."
       ;;
     cpm)
       package cpm cpm "CP/M (Z80)" \
@@ -116,7 +126,7 @@ to at least \$E800 (Turbo Pascal 3 end address)."
       package_fpc
       ;;
     *)
-      echo "Unknown target $t (agon, cpm, dos, fpc)"
+      echo "Unknown target $t (agon, next, cpm, dos, fpc)"
       exit 1
       ;;
   esac
