@@ -13,6 +13,6 @@ TMP=$(mktemp -d)
 cp "$BUILD"/tp55/* "$TMP/"
 crlf "$WALK" "$TMP/walk.txt"
 (cd "$TMP" && "$EMU2" advent.exe $SEED < walk.txt |
-   python3 "$ROOT/tools/echo-input.py" "$WALK" > "$BUILD/test/tp55.txt")
+   "$PYTHON" "$ROOT/tools/echo-input.py" "$WALK" > "$BUILD/test/tp55.txt")
 rm -rf "$TMP"
 check tp55

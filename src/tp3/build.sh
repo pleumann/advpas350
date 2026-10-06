@@ -19,7 +19,7 @@ echo "=== CP/M (Turbo Pascal 3): data files"
 # TP3 needs CRLF line endings in text files.
 crlf "$DAT" "$TMP/fls/adventur.dat"
 (cd "$TMP/fls" && tnylpo advfls > advfls.log)
-python3 "$ROOT/tools/verify-data.py" "$ROOT/original/files" "$TMP/fls"
+"$PYTHON" "$ROOT/tools/verify-data.py" "$ROOT/original/files" "$TMP/fls"
 cp "$TMP"/fls/*.dta "$OUT/"
 
 echo "=== CP/M (Turbo Pascal 3): game"

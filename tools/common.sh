@@ -9,6 +9,7 @@
 #   EMU2      the emu2 DOS emulator
 #   FAB       the Fab Agon emulator source tree (for firmware/mos_platform.bin)
 #   AGON_CLI  its CLI emulator binary
+#   PYTHON    Python 3
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 BUILD="$ROOT/build"
@@ -23,6 +24,8 @@ FAB=${FAB:-/Users/joerg/Projekte/fab-agon-emulator}
 # The stock CLI emulator feeds at most one input line per second.  Point
 # AGON_CLI to a build with a shorter delay to speed things up.
 AGON_CLI=${AGON_CLI:-$FAB/target/release/agon-cli-emulator}
+# Python 3, which is just "python" on some systems (e.g. Windows).
+PYTHON=${PYTHON:-$(command -v python3 || command -v python)}
 
 # Compiles quietly with PASTA/80, showing the output only if something went
 # wrong.

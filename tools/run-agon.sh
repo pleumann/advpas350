@@ -24,7 +24,7 @@ cp "$(dirname "$BIN")"/*.dta "$SD/"
 INPUT_ALL=$(mktemp)
 { echo "$NAME $ARGS"; cat "$INPUT"; } > "$INPUT_ALL"
 
-python3 "$ROOT/tools/play.py" "$INPUT_ALL" -- \
+"$PYTHON" "$ROOT/tools/play.py" "$INPUT_ALL" -- \
   "$AGON_CLI" \
     --mos "$FAB/firmware/mos_platform.bin" --sdcard "$SD" -u
 

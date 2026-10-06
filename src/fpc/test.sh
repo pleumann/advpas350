@@ -12,6 +12,6 @@ mkdir -p "$BUILD/test"
 TMP=$(mktemp -d)
 cp "$BUILD"/fpc/* "$TMP/"
 (cd "$TMP" && ./advent $SEED < "$WALK" |
-   python3 "$ROOT/tools/echo-input.py" "$WALK" > "$BUILD/test/fpc.txt")
+   "$PYTHON" "$ROOT/tools/echo-input.py" "$WALK" > "$BUILD/test/fpc.txt")
 rm -rf "$TMP"
 check fpc

@@ -18,7 +18,7 @@ compile --cpm --release "$HERE/advfls.pas"
 mv "$HERE/advfls.com" "$TMP/"
 cp "$DAT" "$TMP/adventur.dat"
 (cd "$TMP" && tnylpo advfls > advfls.log)
-python3 "$ROOT/tools/verify-data.py" "$ROOT/original/files" "$TMP"
+"$PYTHON" "$ROOT/tools/verify-data.py" "$ROOT/original/files" "$TMP"
 cp "$TMP"/*.dta "$OUT/"
 rm -rf "$TMP"
 
