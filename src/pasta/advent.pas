@@ -194,5 +194,10 @@ BEGIN {MAIN PROGRAM}
 	UNTIL DONE;
     END;
     {  Set VT-100's back to VT-52 mode.  }
-    IF VT100 THEN WRITE(#27,'[?2l')	{ CHANGED: was CHR(33B) }
+    IF VT100 THEN WRITE(#27,'[?2l');	{ CHANGED: was CHR(33B) }
+    { CHANGED: Most of the 8-bit targets don't have a proper operating system
+    that is able to clean up behind a program.  We close the files explicitly,
+    so no open handles remain.  }
+    CLOSE(ADVTXT);
+    CLOSE(KATAB)
 END.
