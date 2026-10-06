@@ -36,5 +36,10 @@ END;
 {  Outputs one line of message text.  }
 PROCEDURE SAYLINE(VAR S:LINE);
 BEGIN
+{$IFDEF SYS_ZX}
+    { CHANGED: Set the ROM's scroll counter (SCR_CT), so long messages never
+    stop with "Scroll?".  }
+    MEM[23692]:=255;
+{$ENDIF}
     WRITELN(S)
 END;

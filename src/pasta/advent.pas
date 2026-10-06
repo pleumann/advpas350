@@ -135,6 +135,10 @@ order of things so that it will run even smaller.  The  time  required  to  swap
 out overlays is presently only slightly noticable by the player.  }
 
 BEGIN {MAIN PROGRAM}
+{$IFDEF SYS_ZXNEXT}
+    SETCPUSPEED(3);	{ CHANGED: Run the Next at 28 MHz.  }
+{$ENDIF}
+
     {  Initialize everything.  }
 {$IFDEF HEAPINFO}
     WRITELN('PASTA: Heap before INITIALIZE: ',MEMAVAIL);
