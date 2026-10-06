@@ -2,10 +2,10 @@
 # Builds the port of Adventure for all platforms, by calling build.sh (and,
 # with --test, test.sh) in each source tree:
 #
-#   src/pasta  Agon (PASTA/80)                   -> build/agon/
-#   src/tp3    CP/M (Turbo Pascal 3)             -> build/cpm/
 #   src/fpc    Host (Free Pascal), optional      -> build/fpc/
+#   src/tp3    CP/M (Turbo Pascal 3)             -> build/cpm/
 #   src/tp55   DOS (Turbo Pascal 5.5), optional  -> build/tp55/
+#   src/pasta  Agon (PASTA/80)                   -> build/agon/
 #
 # Each tree creates its data files (*.DTA) with its own ADVFLS. The tests play
 # the 350 point walkthrough with the random seed 1234 and compare the
@@ -17,7 +17,7 @@
 
 set -e
 . "$(dirname "$0")/common.sh"
-TREES="pasta tp3 fpc tp55"
+TREES="fpc tp3 tp55 pasta"
 
 for t in $TREES; do
   "$ROOT/src/$t/build.sh"
