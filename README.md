@@ -1,6 +1,6 @@
 # Colossal Cave Adventure in Pascal
 
-This repository contains ports of [Barry C. Breen's "Adventures in Pascal"](https://www.ibiblio.org/pub/academic/computer-science/history/pdp-11/rsx/decus/rsx82b/351130/) (1980-1983) to various old and modern Pascal compilers. The original is known as BREE0350 in [Arthur O'Dwyer's collection of Adventure versions](https://github.com/Quuxplusone/Advent). It is a translation of Kent Blackett's FORTRAN-IV-PLUS version of Crowther and Woods' Colossal Cave Adventure (350 points), written in OMSI Pascal V1.2 for RSX-11M on a PDP-11/23 and distributed via DECUS. The original distribution is in [original](original) (see [README.md](original/README.md) there), the sources extracted from it in [src/omsi](src/omsi). The ported sources are in [src](src).
+This repository contains ports of [Barry C. Breen's "Adventures in Pascal"](https://www.ibiblio.org/pub/academic/computer-science/history/pdp-11/rsx/decus/rsx82b/351130/) (1980-1983) to various old and modern Pascal compilers. The original is known as BREE0350 in [Arthur O'Dwyer's collection of Adventure versions](https://github.com/Quuxplusone/Advent). It is a translation of Kent Blackett's FORTRAN-IV-PLUS version of Crowther and Woods' Colossal Cave Adventure (350 points), written in OMSI Pascal V1.2 for RSX-11M on a PDP-11/23 and distributed via DECUS. The original distribution is in [original](original) (see [README.md](original/README.md) there), the sources extracted from it in [src/omsi](src/omsi). The ported sources are in the other subfolders of [src](src).
 
 The goal was to stay as close to the original as possible for each port,
 applying changes only where the specific compiler needs them. There is one file per original module, with the same name (in lower case), and all comments have been kept. Changes are marked with comments starting with `CHANGED:`, so `grep CHANGED: src/tp3/*.pas` lists them for one platform. Only purely mechanical changes are not marked individually:
@@ -16,22 +16,22 @@ available on the [releases page](https://github.com/pleumann/advpas350/releases)
 The following compilers are currently supported:
 
 - [Free Pascal](https://www.freepascal.org)
-- [PASTA/80](https://github.com/pleumann/pasta80)
 - [Turbo Pascal 3](https://en.wikipedia.org/wiki/Turbo_Pascal#Version_3)
 - [Turbo Pascal 5.5](https://en.wikipedia.org/wiki/Turbo_Pascal#Version_55)
+- [PASTA/80](https://github.com/pleumann/pasta80)
 
 The following table shows the status per compiler and target.
 
 | Compiler | Target        | Status |
 |----------|---------------|--------|
 | Free Pascal | Any   | Works (`{$MODE TP}` in the source), completes the 350 point walkthrough. Tested on macOS only. |
-| PASTA/80 | Agon          | Works, with overlays (`advent.bin` 24,223 bytes, `advent.ovr` 65,536 bytes for eight 8K slots). Completes the 350 point walkthrough. |
-| PASTA/80 | Spectrum Next | Compiles with overlays, but the resident part (22.7K) doesn't leave room for the heap, which needs about 7.5K. Needs more resident memory, e.g. a program start below $8000. |
-| PASTA/80 | CP/M          | Too large (about 63.8K without overlays, and PASTA/80 has no overlays on disk yet). |
+| Turbo Pascal 3 | CP/M | Works (`advent.com` 43,136 bytes plus 6.4K data at run time, no overlays needed), completes the 350 point walkthrough. |
+| Turbo Pascal 5.5 | DOS           | Works (33K code), completes the 350 point walkthrough. |
+| PASTA/80 | Agon          | Works, with overlays (`advent.bin` 24,223 bytes, `advent.ovr` 65,536 bytes for eight 8K slots). Completes the 350 point walkthrough. Also played on a real Agon, including saving and restoring a game. |
+| PASTA/80 | Spectrum Next | Works with overlays, at 28 MHz. Needs a PASTA/80 version with program start $6000 (resident part 22.8K, leaving 7.9K heap) and the esxDOS fix for files over 64K (both not yet released). Played manually in CSpect and on a real Next (up to the bird and the rod, including saving and restoring a game), walkthrough not yet run due to lack of automation. |
+| PASTA/80 | CP/M          | Too large (about 63.8K without overlays, including 4.5K static data, and PASTA/80 has no overlays on disk yet). |
 | PASTA/80 | Spectrum 128K | Not yet. Has overlays, but no file I/O and too little resident memory. Maybe with esxDOS. |
 | PASTA/80 | Spectrum 48K  | Not yet. Has no overlays, no file I/O and too little resident memory. Maybe with esxDOS. |
-| Turbo Pascal 3 | CP/M | Works (`advent.com` 43,136 bytes, no overlays needed), completes the 350 point walkthrough. |
-| Turbo Pascal 5.5 | DOS           | Works (33K code), completes the 350 point walkthrough. |
 
 ## Source trees
 
@@ -43,9 +43,9 @@ walkthrough test (see below) makes sure that they all play the same game.
 | Directory | Compiler | Target |
 |-----------|----------|--------|
 | [src/fpc](src/fpc) | Free Pascal (TP mode) | macOS (Linux etc. untested) |
-| [src/pasta](src/pasta) | PASTA/80 | Agon (later Spectrum Next and 128K) |
 | [src/tp3](src/tp3) | Turbo Pascal 3 | CP/M |
 | [src/tp55](src/tp55) | Turbo Pascal 5.5 | DOS |
+| [src/pasta](src/pasta) | PASTA/80 | Agon, Spectrum Next (later 128K) |
 
 The original sources in [src/omsi](src/omsi) make comparisons easy:
 `diff src/omsi/subs1.pas src/tp3/subs1.pas` shows exactly what the port changed
@@ -72,7 +72,7 @@ anywhere:
 
 | Script | Does |
 |--------|------|
-| `build.sh` | Builds the data files and the game from scratch into `build/agon`, `build/cpm`, `build/fpc` or `build/tp55`. |
+| `build.sh` | Builds the data files and the game from scratch into `build/fpc`, `build/cpm`, `build/tp55` or `build/agon`. |
 | `run.sh [seed]` | Starts the game from there, in the emulator if needed. Saved games are kept in that directory. |
 | `test.sh` | Plays the 350 point walkthrough and compares the transcript with the expected one (see [Testing](#testing)). |
 
@@ -84,7 +84,8 @@ $ tools/build.sh           # Data files and all versions
 $ tools/build.sh --test    # Additionally plays the 350 point walkthrough on each
 $ src/tp3/build.sh         # Only the CP/M version
 $ src/tp3/run.sh 1234      # Play it under tnylpo, with random seed 1234
-$ tools/package.sh         # Zip files for Agon, CP/M and DOS in build/release
+$ tools/package.sh         # Zip files for all versions in build/release
+$ tools/package.sh fpc     # Only the zip for the host (e.g. advpas350-macos.zip)
 ```
 
 The scripts share their settings via [tools/common.sh](tools/common.sh). They need [PASTA/80](https://github.com/pleumann/pasta80) (with
@@ -121,14 +122,18 @@ strings differ). Free Pascal and Turbo Pascal 5.5 use typed files without a
 header, so their files are different. Both Turbo Pascals need `ADVENTUR.DAT`
 with CRLF line endings; with LF only, TP3's ADVFLS hangs.
 
-**Agon.** `pasta80 --agon --ovr --release advent.pas` in `src/pasta` gives
-`advent.bin` and `advent.ovr`. This needs a PASTA/80 version that includes the
-fix for nested far calls in `rtl/overlays.asm` (October 2026, see below); with
-an older version the game hangs after the first command. Copy `advent.bin`,
-`advent.ovr` and the five `.DTA` files into the same directory on the SD card,
-change into it and type `advent`. The game opens its files without a path, so
-it must be started from that directory. MOS 3 is required; MOS 2.x reports
-"Invalid executable".
+**Host.** `fpc advent.pas` in `src/fpc`. On macOS, `src/fpc/build.sh` builds a
+universal binary for Apple Silicon and Intel Macs (it compiles for both and
+combines them with `lipo`).
+
+**Other systems.** The GitHub Actions workflow
+[.github/workflows/build.yml](.github/workflows/build.yml) builds the Free
+Pascal version for Linux (x86_64 and ARM64), Windows and macOS (universal
+binary, using the official FPC package that contains both compilers), plays the
+walkthrough on each and packs the zips. It only runs when started by hand, with "Run
+workflow" on the repository's Actions page or `gh workflow run build.yml`. The
+zips end up as artifacts of the run, and optionally (if a release tag is given
+when starting it) attached to that release.
 
 **CP/M.** `tools/tp3c.sh src/tp3 advent` compiles the game with Turbo Pascal 3
 under tnylpo by remote-controlling the `TURBO.COM` menu (it converts the line
@@ -136,8 +141,17 @@ endings to CRLF, which TP3 needs, in a build directory). Copy `advent.com` and
 the five `.DTA` files to a CP/M disk and run
 `advent`. Of course the sources can also be compiled with TP3 directly.
 
-**Host and DOS.** `fpc advent.pas` in `src/fpc`, and `tpc advent.pas` in
-`src/tp55`.
+**DOS.** `tpc advent.pas` in `src/tp55`.
+
+**Agon.** `pasta80 --agon --ovr --release advent.pas` in `src/pasta` gives
+`advent.bin` and `advent.ovr`. This needs a PASTA/80 version from October
+2026 or later, which includes the fixes for the bugs the port revealed (see
+below). With older versions the game doesn't compile or hangs after the first
+command. Copy `advent.bin`,
+`advent.ovr` and the five `.DTA` files into the same directory on the SD card,
+change into it and type `advent`. The game opens its files without a path, so
+it must be started from that directory. MOS 3 is required; MOS 2.x reports
+"Invalid executable".
 
 **Random seed.** All versions take an optional integer on the command line
 (`advent 1234`), which is used as the seed of the random number generator.
@@ -191,56 +205,58 @@ there the seed will always be random.)
 
 ### Per platform
 
-| Issue | PASTA/80 | TP3 | Free Pascal | TP 5.5 |
-|-------|----------|-----|-------------|--------|
-| OMSI's `EXIT` leaves the innermost loop | `BREAK` | `GOTO 9` (no `BREAK`) | `BREAK` | `GOTO 9` (no `BREAK`) |
-| Loop variable of the enclosing procedure (`GETWORD`, `GETDT`, ADVFLS' `NEWREC`) | as is | as is | local variable | local variable |
-| `VAR` parameter as loop variable (`SAVNAME`) | as is | local variable | local variable | local variable |
-| `ARRAY[-1..LOCSIZ]` | constant `CARRIED=-1` | as is | as is | as is |
-| Local procedure `OBJECT` in PARSE (reserved word) | as is | as is | `OBJCT` | `OBJCT` |
-| Boolean evaluation | complete (default) | complete (default) | complete via `{$B+}` | complete via `{$B+}` |
-| Pointer accessed before checking for NIL (5 places) | as is | as is | checked first | checked first |
-| Directives | `{$A-}` (locals on stack), `{$M 2048}` | `{$A-}`, `{$C-}` | `{$MODE TP}`, `{$B+}` | `{$B+}` |
-| Overlays | `OVERLAY` prefixes | none | none | none |
+| Issue | Free Pascal | TP3 | TP 5.5 | PASTA/80 |
+|-------|-------------|-----|--------|----------|
+| OMSI's `EXIT` leaves the innermost loop | `BREAK` | `GOTO 9` (no `BREAK`) | `GOTO 9` (no `BREAK`) | `BREAK` |
+| Loop variable of the enclosing procedure (`GETWORD`, `GETDT`, ADVFLS' `NEWREC`) | local variable | as is | local variable | as is |
+| `VAR` parameter as loop variable (`SAVNAME`) | local variable | local variable | local variable | as is |
+| Local procedure `OBJECT` in PARSE (reserved word) | `OBJCT` | as is | `OBJCT` | as is |
+| Boolean evaluation | complete via `{$B+}` | complete (default) | complete via `{$B+}` | complete (default) |
+| Pointer accessed before checking for NIL (5 places) | checked first | as is | checked first | as is |
+| Directives | `{$MODE TP}`, `{$B+}` | `{$A-}`, `{$C-}` | `{$B+}` | `{$A-}` (locals on stack), `{$M 2048}` |
+| Overlays | none | none | none | `OVERLAY` prefixes |
 
 Some notes on these:
 
+- **`{$MODE TP}`** makes Free Pascal accept the bodies of `FORWARD` declared
+  routines without a parameter list and assignments to `FOR` loop variables
+  (the original leaves loops this way in VERBS3 and LOOP0). It also keeps
+  `INTEGER` at 16 bits.
 - **Complete boolean evaluation.** Free Pascal and Turbo Pascal 5.5
   short-circuit by default. This would skip calls of the random number
   generator in some conditions, so games with the same seed would differ from
   the other versions.
 - **NIL pointers.** Five places in the original access a pointer before
   checking it for NIL, e.g. `(LINK2^.VERBVAL<>K) AND (LINK2<>NIL)` in
-  `SEARCH`. On the PDP-11 and the Z80 this just reads some word near address
-  0, so PASTA/80 and TP3 keep the original. On modern systems it crashes, so
-  the Free Pascal and Turbo Pascal 5.5 versions check first (in `SEARCH`,
-  `MOVE`, `TAKEIT`, `BACKUP` and `INITIALIZE`), with the same results.
-- **`{$A-}`** means "locals on the stack" in PASTA/80 and TP3. It is needed
+  `SEARCH`. On modern systems this crashes, so the Free Pascal and Turbo
+  Pascal 5.5 versions check first (in `SEARCH`, `MOVE`, `TAKEIT`, `BACKUP` and
+  `INITIALIZE`), with the same results. On the PDP-11 and the Z80 it just reads
+  some word near address 0, so the TP3 and PASTA/80 versions keep the
+  original.
+- **`{$C-}`** turns off TP3's ^C check, which would otherwise eat characters
+  typed ahead.
+- **`{$A-}`** means "locals on the stack" in TP3 and PASTA/80. It is needed
   for the recursion `SAYIT` -> `PARSE`, and on the Agon because static locals
   of an overlay would be reset when the overlay is reloaded. In Free Pascal and
   Turbo Pascal 5.5 `$A` means alignment and would change the record layout.
 - **`{$M 2048}`** reduces PASTA/80's stack to 2K, which is plenty (checked with
   `{$K+}` during the full walkthrough).
-- **`{$C-}`** turns off TP3's ^C check, which would otherwise eat characters
-  typed ahead.
-- **`{$MODE TP}`** makes Free Pascal accept the bodies of `FORWARD` declared
-  routines without a parameter list and assignments to `FOR` loop variables
-  (the original leaves loops this way in VERBS3 and LOOP0). It also keeps
-  `INTEGER` at 16 bits.
 - **Overlays.** With `--ovr`, PASTA/80 puts the game into eight overlays, all
   below 8K. The grouping loosely follows ADVBLD.ODL: base routines (SUBS0,
   SUBS1, SPEAK, GETIN, ASK, ...) stay resident, the rest is grouped by usage
   (input parsing, main loop, verbs, travel, initialization etc.). Without
   `--ovr` the `OVERLAY` markers are ignored. The TP3 version fits into a CP/M
   TPA without overlays.
-- **Compiler workaround.** `src/pasta/advent.pas` contains a never executed
-  reference to `DOOBJ` and `DOVERB` (marked as such). It works around a bug in
-  PASTA/80's dependency analysis: a call from a nested procedure to a
-  `FORWARD` procedure whose body hasn't been compiled yet makes the compiler
-  drop everything that is only called from that body. Remove the workaround
-  once the compiler has been fixed. Compiled with `HEAPINFO` defined, the
-  PASTA/80 version also shows how much heap `INITIALIZE` uses (about 7.2K for
-  the travel table).
+- **Heap.** Compiled with `HEAPINFO` defined, the PASTA/80 version shows how
+  much heap `INITIALIZE` uses (about 7.2K for the travel table).
+- **Spectrum Next.** `pasta80 --zxnext --ovr --release advent.pas` in
+  `src/pasta`. The main program switches the Next to 28 MHz
+  (`SETCPUSPEED(3)`, only compiled for `SYS_ZXNEXT`). On all Spectrum
+  targets, `SAYLINE` sets the ROM's scroll counter (`SCR_CT`, address 23692)
+  to 255 before each line, so long messages never stop with "Scroll?". Since the overlays are
+  separate files, the easiest way to try it is the IDE with
+  `pasta80 --ide --zxnext --run advent.pas` (C, then R) in a directory that
+  also contains the five `.DTA` files.
 
 ### Removed: wizardry
 
@@ -296,13 +312,21 @@ to be lost. The compiled VT-100 texts still exist in `ADVTXT.100`, though.
 - **Loading messages.** "Be patient...", "Now loading sections 1-7" and
   "Now loading section 8" to "12" are original. The latter are magic messages
   32 to 36 from `ADVENTURE.DAT`.
-- **Overlay fix in PASTA/80.** Porting the game revealed a bug in the far call
-  trampoline (`rtl/overlays.asm`): calling the same overlay twice from root
-  code, with that overlay calling another overlay, left the wrong overlay
-  banked in. This has been fixed, and `tests/overlays.pas` in the PASTA/80 test
-  suite covers it now (as of October 2026, not yet in a release). A forward declaration and its body must be in the same
-  overlay, otherwise calls end up in the wrong code. All forward declarations
-  in this port fulfill that.
+- **Bugs found in PASTA/80.** Porting the game revealed a few bugs in
+  PASTA/80, all fixed in October 2026:
+  - The far call trampoline (`rtl/overlays.asm`) left the wrong overlay banked
+    in when the same overlay was called twice from root code and called
+    another overlay itself. `tests/overlays.pas` in the PASTA/80 test suite
+    covers this now.
+  - The dependency analysis dropped code that was only called from the body of
+    a `FORWARD` declared routine, if a nested procedure had called that routine
+    before its body was compiled.
+  - Negative lower bounds like `ARRAY[-1..LOCSIZ]` didn't compile.
+  - A forward declaration and its body in different overlays compiled without
+    a message, but calls ended up in the wrong code. This is an error now.
+
+  Earlier versions of the port contained workarounds for the second and third
+  bug, which are gone now.
 - **CP/M memory.** TP3 places the data at the end address of the system it
   compiles on, which under tnylpo is $FC31, almost 64K. That would crash on
   most real CP/M machines, so the build sets the end address to $E800
@@ -312,6 +336,10 @@ to be lost. The compiled VT-100 texts still exist in `ADVTXT.100`, though.
   walkthrough still works with $E500 but not with $E400 (run-time error FF,
   heap and stack collide while loading), so the game needs about 8.7K heap
   and stack under TP3. Not tested on real hardware.
+- **Comparing sizes.** PASTA/80 puts the static variables into the binary,
+  Turbo Pascal doesn't (they are allocated at run time). So the 63.8K of
+  PASTA/80's CP/M version (4.5K of which are static data) compare to about
+  49.6K for TP3 (43.1K `advent.com` plus 6.4K data), not to 43.1K.
 - **Original limitations stay.** The lamp lasts 330 turns (1000 if you ask
   for instructions, which costs 5 points). The 350 point walkthrough in
   `tests/walkthrough.txt` needs 424 turns. The lamp runs out of power just
@@ -323,8 +351,8 @@ to be lost. The compiled VT-100 texts still exist in `ADVTXT.100`, though.
 
 `src/*/test.sh` (or `tools/build.sh --test` for all of them) plays
 `tests/walkthrough.txt` with each version, using
-the random seed 1234 from the command line: in the Fab Agon CLI emulator, under
-tnylpo, on the host and under emu2. It compares the transcripts with
+the random seed 1234 from the command line: on the host, under tnylpo, under
+emu2 and in the Fab Agon CLI emulator. It compares the transcripts with
 `tests/expected.txt` (results in `build/test`). Since the random number generator is the same
 everywhere, there is a single expected transcript for all platforms.
 [tools/normalize.sh](tools/normalize.sh) strips emulator banners and blank lines
