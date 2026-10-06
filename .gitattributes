@@ -1,0 +1,6 @@
+# LF line endings everywhere, also in checkouts on Windows, since the scripts
+# and the comparison with tests/expected.txt depend on them.
+* text=auto eol=lf
+
+# The original distribution stays exactly as it is.
+original/** -text

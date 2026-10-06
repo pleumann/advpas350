@@ -67,6 +67,10 @@ jobs:
       - name: Test
         run: src/fpc/test.sh
 
+      - name: Show differences of the transcript
+        if: failure()
+        run: head -60 build/test/fpc.diff || true
+
       - name: Package
         run: tools/package.sh fpc
 
