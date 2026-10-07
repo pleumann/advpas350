@@ -24,7 +24,7 @@ The following table shows the status per compiler and target.
 
 | Compiler | Target | Status | Screenshot |
 | :------: | :----: | :----: | :--------: |
-| Free Pascal | Any   | Works (`{$MODE TP}` in the source), completes the 350 point walkthrough. Tested on macOS only. | ![Screenshot](images/macos.png) |
+| Free Pascal | Any   | Works (`{$MODE TP}` in the source), completes the 350 point walkthrough. Tested on Linux, Windows and macOS (see Other systems below). | ![Screenshot](images/macos.png) |
 | Turbo Pascal 3 | CP/M | Works (`advent.com` 43,136 bytes plus 6.4K data at run time, no overlays needed), completes the 350 point walkthrough. | ![Screenshot](images/cpm.png) |
 | Turbo Pascal 5.5 | DOS           | Works (33K code), completes the 350 point walkthrough. | ![Screenshot](images/dos.png) |
 | PASTA/80 | Agon          | Works, with overlays (`advent.bin` 24,223 bytes, `advent.ovr` 65,536 bytes for eight 8K slots). Completes the 350 point walkthrough. Also played on a real Agon, including saving and restoring a game. | ![Screenshot](images/agon.png) |
