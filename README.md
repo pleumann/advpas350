@@ -1,4 +1,4 @@
-# Adventure(s) in Pascal (aka "Colossal Cave Adventure")
+# Adventure(s) in Pascal (aka "Colossal Cave")
 
 This repository contains ports of [Barry C. Breen's "Adventures in Pascal"](https://www.ibiblio.org/pub/academic/computer-science/history/pdp-11/rsx/decus/rsx82b/351130/) (1980-1983) to various old and modern Pascal compilers. The original is known as BREE0350 in [Arthur O'Dwyer's collection of Adventure versions](https://github.com/Quuxplusone/Advent). It is a translation of Kent Blackett's FORTRAN-IV-PLUS version of Crowther and Woods' Colossal Cave Adventure (350 points), written in OMSI Pascal V1.2 for RSX-11M on a PDP-11/23 and distributed via DECUS. The original distribution is in [original](original) (see [README.md](original/README.md) there), the sources extracted from it in [src/omsi](src/omsi). The ported sources are in the other subfolders of [src](src).
 
@@ -22,16 +22,16 @@ The following compilers are currently supported:
 
 The following table shows the status per compiler and target.
 
-| Compiler | Target        | Status |
-|----------|---------------|--------|
-| Free Pascal | Any   | Works (`{$MODE TP}` in the source), completes the 350 point walkthrough. Tested on macOS only. |
-| Turbo Pascal 3 | CP/M | Works (`advent.com` 43,136 bytes plus 6.4K data at run time, no overlays needed), completes the 350 point walkthrough. |
-| Turbo Pascal 5.5 | DOS           | Works (33K code), completes the 350 point walkthrough. |
-| PASTA/80 | Agon          | Works, with overlays (`advent.bin` 24,223 bytes, `advent.ovr` 65,536 bytes for eight 8K slots). Completes the 350 point walkthrough. Also played on a real Agon, including saving and restoring a game. |
-| PASTA/80 | Spectrum Next | Works with overlays, at 28 MHz. Needs to be compiled to start address $6000 (resident part 22.8K, leaving 7.9K heap). Played manually in CSpect and on a real Next (up to the bird and the rod, including saving and restoring a game), walkthrough not yet run due to lack of automation. |
-| PASTA/80 | CP/M          | Too large (about 63.8K without overlays, including 4.5K static data, and PASTA/80 has no overlays on disk yet). |
-| PASTA/80 | Spectrum 128K | Not yet. Has overlays, but no file I/O and too little resident memory. Maybe later with esxDOS. |
-| PASTA/80 | Spectrum 48K  | Not yet. Has no overlays, no file I/O and too little resident memory. Maybe later with esxDOS. |
+| Screenshot | Compiler | Target        | Status |
+|---|----------|---------------|--------|
+| ![Screenshot](images/macos.png) | Free Pascal | Any   | Works (`{$MODE TP}` in the source), completes the 350 point walkthrough. Tested on macOS only. |
+| ![Screenshot](images/cpm.png) | Turbo Pascal 3 | CP/M | Works (`advent.com` 43,136 bytes plus 6.4K data at run time, no overlays needed), completes the 350 point walkthrough. |
+| ![Screenshot](images/dos.png) | Turbo Pascal 5.5 | DOS           | Works (33K code), completes the 350 point walkthrough. |
+| ![Screenshot](images/agon.png) | PASTA/80 | Agon          | Works, with overlays (`advent.bin` 24,223 bytes, `advent.ovr` 65,536 bytes for eight 8K slots). Completes the 350 point walkthrough. Also played on a real Agon, including saving and restoring a game. |
+| ![Screenshot](images/next.png) | PASTA/80 | Spectrum Next | Works with overlays, at 28 MHz. Needs to be compiled to start address $6000 (resident part 22.8K, leaving 7.9K heap). Played manually in CSpect and on a real Next (up to the bird and the rod, including saving and restoring a game), walkthrough not yet run due to lack of automation. |
+| n/a | PASTA/80 | CP/M          | Too large (about 63.8K without overlays, including 4.5K static data, and PASTA/80 has no overlays on disk yet). |
+| n/a | PASTA/80 | Spectrum 128K | Not yet. Has overlays, but no file I/O and too little resident memory. Maybe later with esxDOS. |
+| n/a | PASTA/80 | Spectrum 48K  | Not yet. Has no overlays, no file I/O and too little resident memory. Maybe later with esxDOS. |
 
 ## Source trees
 
