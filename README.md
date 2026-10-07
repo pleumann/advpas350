@@ -22,16 +22,16 @@ The following compilers are currently supported:
 
 The following table shows the status per compiler and target.
 
-| Screenshot | Compiler | Target        | Status |
-|---|----------|---------------|--------|
-| ![Screenshot](images/macos.png) | Free Pascal | Any   | Works (`{$MODE TP}` in the source), completes the 350 point walkthrough. Tested on macOS only. |
-| ![Screenshot](images/cpm.png) | Turbo Pascal 3 | CP/M | Works (`advent.com` 43,136 bytes plus 6.4K data at run time, no overlays needed), completes the 350 point walkthrough. |
-| ![Screenshot](images/dos.png) | Turbo Pascal 5.5 | DOS           | Works (33K code), completes the 350 point walkthrough. |
-| ![Screenshot](images/agon.png) | PASTA/80 | Agon          | Works, with overlays (`advent.bin` 24,223 bytes, `advent.ovr` 65,536 bytes for eight 8K slots). Completes the 350 point walkthrough. Also played on a real Agon, including saving and restoring a game. |
-| ![Screenshot](images/next.png) | PASTA/80 | Spectrum Next | Works with overlays, at 28 MHz. Needs to be compiled to start address $6000 (resident part 22.8K, leaving 7.9K heap). Played manually in CSpect and on a real Next (up to the bird and the rod, including saving and restoring a game), walkthrough not yet run due to lack of automation. |
-| n/a | PASTA/80 | CP/M          | Too large (about 63.8K without overlays, including 4.5K static data, and PASTA/80 has no overlays on disk yet). |
-| n/a | PASTA/80 | Spectrum 128K | Not yet. Has overlays, but no file I/O and too little resident memory. Maybe later with esxDOS. |
-| n/a | PASTA/80 | Spectrum 48K  | Not yet. Has no overlays, no file I/O and too little resident memory. Maybe later with esxDOS. |
+| Compiler | Target | Status | Screenshot |
+| :------: | :----: | :----: | :--------: |
+| Free Pascal | Any   | Works (`{$MODE TP}` in the source), completes the 350 point walkthrough. Tested on macOS only. | ![Screenshot](images/macos.png) |
+| Turbo Pascal 3 | CP/M | Works (`advent.com` 43,136 bytes plus 6.4K data at run time, no overlays needed), completes the 350 point walkthrough. | ![Screenshot](images/cpm.png) |
+| Turbo Pascal 5.5 | DOS           | Works (33K code), completes the 350 point walkthrough. | ![Screenshot](images/dos.png) |
+| PASTA/80 | Agon          | Works, with overlays (`advent.bin` 24,223 bytes, `advent.ovr` 65,536 bytes for eight 8K slots). Completes the 350 point walkthrough. Also played on a real Agon, including saving and restoring a game. | ![Screenshot](images/agon.png) |
+| PASTA/80 | Spectrum Next | Works with overlays, at 28 MHz. Needs to be compiled to start address $6000 (resident part 22.8K, leaving 7.9K heap). Played manually in CSpect and on a real Next (up to the bird and the rod, including saving and restoring a game), walkthrough not yet run due to lack of automation. | ![Screenshot](images/next.png) |
+|PASTA/80 | CP/M          | Too large (about 63.8K without overlays, including 4.5K static data, and PASTA/80 has no overlays on disk yet). | n/a |
+|PASTA/80 | Spectrum 128K | Not yet. Has overlays, but no file I/O and too little resident memory. Maybe later with esxDOS. | n/a |
+|PASTA/80 | Spectrum 48K  | Not yet. Has no overlays, no file I/O and too little resident memory. Maybe later with esxDOS. | n/a |
 
 ## Source trees
 
@@ -109,12 +109,14 @@ compiled for CP/M and run under tnylpo:
 ```bash
 $ cd src/pasta
 $ pasta80 --cpm advfls.pas
-$ cp ../../original/files/adventure.dat ADVENTUR.DAT    # 8.3 name for CP/M
+$ cp ../../original/files/adventure.dat adventur.dat    # 8.3 name for CP/M
 $ tnylpo advfls
 ```
 
 This creates `ADVTXT.DTA`, `KATAB.DTA`, `ADVDAT.DTA`, `ADVENT.DTA` and
-`ADVWIZ.DTA` (the latter holds saved games). [tools/verify-data.py](tools/verify-data.py)
+`ADVWIZ.DTA` (the latter holds saved games). tnylpo maps CP/M file names to
+lowercase names on the host, so `ADVENTUR.DAT` must be named `adventur.dat`
+there, and the data files come out as `advtxt.dta` etc. [tools/verify-data.py](tools/verify-data.py)
 compares the first four record by record with the original 1983 files in
 `original/files`. They are identical. Turbo Pascal 3 uses the same typed
 file format; its ADVFLS gives the same records (only unused bytes behind the
